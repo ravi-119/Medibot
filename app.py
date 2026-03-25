@@ -19,6 +19,8 @@ def build_rag_chain():
     google_api_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
     if not google_api_key:
         raise RuntimeError("Missing GOOGLE_API_KEY or GEMINI_API_KEY.")
+    if not os.environ.get("PINECONE_API_KEY"):
+        raise RuntimeError("Missing PINECONE_API_KEY.")
 
     os.environ["GOOGLE_API_KEY"] = google_api_key
 
@@ -59,6 +61,13 @@ def index():
     return render_template("chat.html")
 
 
+@app.route("/health")
+def health():
+    if rag_chain is None:
+        return "not ready", 503
+    return "ok", 200
+
+
 @app.route("/get", methods=["GET", "POST"])
 def chat():
     msg = request.form.get("msg") or request.args.get("msg")
@@ -76,4 +85,6 @@ def chat():
         return "Error processing your request."
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    port = int(os.environ.get("PORT", "8080"))
+    debug = os.environ.get("FLASK_DEBUG", "").lower() in {"1", "true", "yes"}
+    app.run(host="0.0.0.0", port=port, debug=debug)
