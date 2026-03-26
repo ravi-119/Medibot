@@ -1,6 +1,0 @@
-.env
-.git
-.github
-__pycache__/
-research/
-venv/
