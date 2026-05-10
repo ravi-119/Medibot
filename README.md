@@ -128,3 +128,26 @@ open up localhost:
    - ECR_REPO
    - PINECONE_API_KEY
    - OPENAI_API_KEY
+
+
+
+
+
+
+
+
+
+# If it STILL shows Python 3.14
+
+Then Git Bash is ignoring venv PATH.
+
+👉 Fix it using direct venv Python:
+
+./venv/Scripts/python.exe --version
+
+or run your app like this:
+
+./venv/Scripts/python.exe app.py
+
+
+
